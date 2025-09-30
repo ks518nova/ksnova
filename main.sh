@@ -1,67 +1,37 @@
 #!/usr/bin/env bash
 
-# KS CLI - Main Script
-# Handles install, update, uninstall, list, and help commands.
-
 KS_DIR="$HOME/ks_local"
 KS_BIN="$KS_DIR/bin"
 KS_PACKAGES="$KS_DIR/packages"
 
-# Ensure directories exist
 mkdir -p "$KS_BIN" "$KS_PACKAGES"
+
+RAW_BASE="https://raw.githubusercontent.com/ks518nova/ksnova/main"
 
 case "$1" in
   install)
-    PACKAGE="$2"
-    if [[ -z "$PACKAGE" ]]; then
-      echo "❌ No package specified. Usage: ks install <PackageName>"
-      exit 1
-    fi
-
-    case "$PACKAGE" in
-      Pterodactyl_Panel)
-        echo "📦 Installing Pterodactyl Panel..."
-        # Example installation steps
-        sudo apt update && sudo apt install -y docker docker-compose
-        echo "✅ Pterodactyl Panel installed!"
-        ;;
-      Puffer_Panel)
-        echo "📦 Installing PufferPanel..."
-        sudo bash <(curl -s https://packagecloud.io/install/repositories/pufferpanel/pufferpanel/script.deb.sh)
-        sudo apt update && sudo apt install -y pufferpanel
-        sudo pufferpanel user add --admin admin --password admin
-        echo "✅ PufferPanel installed!"
-        ;;
-      *)
-        echo "❌ Unknown package: $PACKAGE"
-        ;;
-    esac
+    echo "📥 Running latest install.sh from KS Nova server..."
+    curl -fsSL "$RAW_BASE/install.sh" | bash -s -- "$2"
     ;;
+  
   update)
-    echo "🔄 Updating KS..."
-    # You can replace this with your actual KS update mechanism
-    sudo apt update && sudo apt upgrade -y ks
-    echo "✅ KS updated!"
+    echo "📥 Running latest update.sh from KS Nova server..."
+    curl -fsSL "$RAW_BASE/update.sh" | bash -s -- "$2"
     ;;
+  
   uninstall)
-    echo "🗑️ Uninstalling KS..."
-    sudo apt remove -y ks
-    echo "✅ KS removed!"
+    echo "📥 Running latest uninstall.sh from KS Nova server..."
+    curl -fsSL "$RAW_BASE/uninstall.sh" | bash -s -- "$2"
     ;;
+  
   list)
-    echo "📋 Available packages:"
-    echo " - Pterodactyl_Panel"
-    echo " - Puffer_Panel"
+    echo "Available packages:"
+    echo "  pterodactyl_panel"
+    echo "  pterodactyl_wings"
+    echo "  puffer_panel"
     ;;
-  help|*)
-    echo "🔧 KS CLI"
-    echo "Usage: ks <command> [package]"
-    echo ""
-    echo "Commands:"
-    echo "  install <Package>   Install a package (Pterodactyl_Panel, Puffer_Panel)"
-    echo "  update              Update KS to the latest version"
-    echo "  uninstall           Remove KS from the system"
-    echo "  list                List available packages"
-    echo "  help                Show this help message"
+  
+  *)
+    echo "Usage: ks <install|update|uninstall|list> [package]"
     ;;
 esac
