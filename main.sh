@@ -11,7 +11,6 @@ RAW_BASE="https://raw.githubusercontent.com/ks518nova/ksnova/action"
 case "$1" in
   install)
     echo "📥 Running latest install.sh from KS Nova server..."
-    curl -fsSL "$RAW_BASE/install.sh" | bash -s -- "${@:1}"
     ;;
   
   update)
